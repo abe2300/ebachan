@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>定例経済ニュース報告</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<meta name="theme-color" content="#1e3a8a">
+<style>
+  :root {
+    --primary: #1e3a8a;
+    --secondary: #3b82f6;
+    --accent: #f59e0b;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --positive: #16a34a;
+    --negative: #dc2626;
+    --warning: #d97706;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', 'Yu Gothic', 'Meiryo', sans-serif;
+    background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+  }
+  header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  header .date {
+    font-size: 16px;
+    opacity: 0.9;
+    position: relative;
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 12px;
+    position: relative;
+  }
+  .toolbar {
+    background: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    background: var(--secondary);
+    color: white;
+  }
+  .btn:hover { background: var(--primary); transform: translateY(-1px); }
+  .btn.secondary { background: #e2e8f0; color: var(--text); }
+  .btn.secondary:hover { background: #cbd5e1; }
+  section {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  section h2 {
+    font-size: 22px;
+    color: var(--primary);
+    border-left: 5px solid var(--accent);
+    padding-left: 14px;
+    margin-bottom: 24px;
+  }
+  .news-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: all 0.2s;
+  }
+  .news-item:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+  .news-num {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    font-weight: bold;
+    margin-right: 12px;
+  }
+  .news-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary);
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 12px;
+  }
+  .news-body {
+    color: var(--text);
+    margin: 12px 0 12px 44px;
+    line-height: 1.8;
+  }
+  .impact {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 12px 0 0 44px;
+    font-size: 14px;
+  }
+  .impact strong { color: var(--warning); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  th {
+    background: var(--primary);
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  th:first-child { border-top-left-radius: 8px; }
+  th:last-child { border-top-right-radius: 8px; }
+  td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) { background: #f8fafc; }
+  .tax-item { font-weight: bold; color: var(--primary); }
+  .tax-amount { color: var(--negative); font-weight: bold; }
+  .detail-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  }
+  .detail-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+  }
+  .employee-icon {
+    display: inline-block;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  /* モーダル */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.2s;
+  }
+  .modal-overlay.active { display: flex; }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    padding: 20px 28px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-header h3 { font-size: 20px; }
+  .modal-close {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.3); }
+  .modal-body { padding: 28px; }
+  .modal-body h4 {
+    color: var(--primary);
+    margin: 16px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--border);
+  }
+  .modal-body ul { padding-left: 24px; margin: 8px 0; }
+  .modal-body li { margin: 6px 0; line-height: 1.7; }
+  .modal-body .highlight {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    padding: 12px 16px;
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+  .modal-body .example-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .modal-body .warning-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: #991b1b;
+  }
+  .source-list {
+    background: #f8fafc;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+  .source-list a {
+    color: var(--secondary);
+    text-decoration: none;
+    display: block;
+    padding: 4px 0;
+  }
+  .source-list a:hover { text-decoration: underline; }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    padding: 20px;
+    font-size: 13px;
+  }
+  .rules-box {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-left: 4px solid var(--positive);
+    padding: 0;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    overflow: hidden;
+  }
+  .rules-box summary {
+    cursor: pointer;
+    padding: 14px 20px;
+    font-weight: bold;
+    color: var(--positive);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s;
+  }
+  .rules-box summary::-webkit-details-marker { display: none; }
+  .rules-box summary:hover { background: rgba(255,255,255,0.4); }
+  .rules-box summary::after {
+    content: '▼';
+    font-size: 12px;
+    transition: transform 0.2s;
+  }
+  .rules-box[open] summary::after { transform: rotate(180deg); }
+  .rules-box .rules-content {
+    padding: 0 20px 16px 20px;
+    animation: slideDown 0.3s;
+  }
+  .rules-box ul { padding-left: 20px; }
+  .rules-box li { margin: 4px 0; }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* 折りたたみセクション */
+  details.collapsible {
+    background: var(--card-bg);
+    border-radius: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+  details.collapsible > summary {
+    cursor: pointer;
+    padding: 24px 30px;
+    font-size: 22px;
+    color: var(--primary);
+    font-weight: bold;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s;
+    border-left: 5px solid var(--accent);
+  }
+  details.collapsible > summary::-webkit-details-marker { display: none; }
+  details.collapsible > summary:hover { background: #f8fafc; }
+  details.collapsible > summary::after {
+    content: '▼';
+    font-size: 14px;
+    color: var(--secondary);
+    transition: transform 0.2s;
+  }
+  details.collapsible[open] > summary::after { transform: rotate(180deg); }
+  details.collapsible .collapse-body {
+    padding: 0 30px 30px 30px;
+    animation: slideDown 0.3s;
+  }
+  @media print {
+    body { background: white; padding: 0; }
+    .toolbar { display: none; }
+    header { box-shadow: none; }
+    section { box-shadow: none; page-break-inside: avoid; }
+  }
+  /* ============================== */
+  /* ハンバーガーメニュー（スマホ用） */
+  /* ============================== */
+  .hamburger {
+    display: none;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 999;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    align-items: center;
+    justify-content: center;
+  }
+  .hamburger:hover { background: var(--secondary); }
+  .toolbar-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 998;
+  }
+  .toolbar-overlay.active { display: block; }
+
+  /* ============================== */
+  /* スマホ用レイアウト（768px以下） */
+  /* ============================== */
+  @media (max-width: 768px) {
+    body { padding: 8px; font-size: 14px; }
+    .container { max-width: 100%; }
+
+    /* ハンバーガーを表示 */
+    .hamburger { display: flex; }
+
+    /* ヘッダー */
+    header {
+      padding: 20px 16px;
+      border-radius: 12px;
+      padding-right: 70px; /* ハンバーガー分の余白 */
+    }
+    header h1 { font-size: 20px; }
+    header .date { font-size: 14px; }
+    header .badge { font-size: 11px; }
+
+    /* ツールバー：スマホでは右からスライドイン */
+    .toolbar {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 280px;
+      height: 100vh;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 70px 16px 20px;
+      border-radius: 0;
+      background: white;
+      z-index: 998;
+      transition: right 0.3s;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+      overflow-y: auto;
+    }
+    .toolbar.open { right: 0; }
+    .toolbar .btn {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 15px;
+      text-align: left;
+    }
+
+    /* セクション */
+    section { padding: 16px; border-radius: 12px; }
+    section h2 { font-size: 18px; }
+
+    /* ニュース項目：番号とタイトルを縦並びに */
+    .news-item { padding: 14px; }
+    .news-num {
+      width: 28px;
+      height: 28px;
+      line-height: 28px;
+      font-size: 14px;
+    }
+    .news-title { font-size: 16px; }
+    .news-body, .impact {
+      margin-left: 0;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    .impact { padding: 10px 12px; }
+
+    /* テーブル → カード型に変換 */
+    table { border: none; }
+    table thead { display: none; }
+    table tbody tr {
+      display: block;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    table tbody tr:nth-child(even) { background: white; }
+    table tbody td {
+      display: block;
+      padding: 4px 0;
+      border: none;
+      font-size: 13px;
+    }
+    table tbody td:first-child {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 8px;
+    }
+    table tbody td:not(:first-child)::before {
+      content: attr(data-label);
+      display: inline-block;
+      min-width: 60px;
+      font-weight: bold;
+      color: var(--primary);
+      font-size: 12px;
+      margin-right: 6px;
+    }
+
+    /* 詳細ボタンを大きくタップしやすく */
+    .detail-btn {
+      padding: 6px 14px;
+      font-size: 13px;
+      margin-top: 8px;
+      margin-left: 0;
+      display: inline-block;
+    }
+
+    /* 年度選択：上下に分割 */
+    #taxYearSelect { width: 100%; min-width: 0; }
+
+    /* モーダル：フルスクリーン */
+    .modal-overlay { padding: 0; align-items: stretch; }
+    .modal {
+      max-width: 100%;
+      max-height: 100vh;
+      border-radius: 0;
+      width: 100%;
+    }
+    .modal-header {
+      border-radius: 0;
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .modal-header h3 { font-size: 17px; }
+    .modal-body { padding: 20px; font-size: 14px; }
+    .modal-body h4 { font-size: 15px; }
+    .modal-body li { font-size: 13px; }
+    .modal-body .highlight,
+    .modal-body .example-box,
+    .modal-body .warning-box {
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+
+    /* フッター */
+    footer { padding: 16px 8px; font-size: 12px; }
+  }
+
+  /* 超小型スマホ（375px以下） */
+  @media (max-width: 375px) {
+    header h1 { font-size: 18px; }
+    .news-title { font-size: 14px; }
+    section h2 { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<!-- ハンバーガーメニュー（スマホのみ表示） -->
+<button class="hamburger" onclick="toggleToolbar()" title="メニュー">☰</button>
+<div class="toolbar-overlay" id="toolbarOverlay" onclick="toggleToolbar()"></div>
+
+<div class="container">
+
+  <header>
+    <h1>📊 定例経済ニュース報告</h1>
+    <div class="date" id="reportDate">読み込み中...</div>
+    <div style="font-size: 13px; opacity: 0.85; margin-top: 4px; position: relative;">
+      📌 報告データ更新日: <span id="dataUpdateDate">2026年6月2日</span>
+    </div>
+    <span class="badge">DAILY REPORT</span>
+  </header>
+
+  <div class="toolbar" id="toolbar">
+    <button class="btn" onclick="window.print()">🖨️ 印刷／PDF出力</button>
+    <button class="btn secondary" onclick="toggleSections()">📋 折りたたみ切替</button>
+    <button class="btn secondary" onclick="copyAll()">📄 全文コピー</button>
+    <button class="btn secondary" onclick="openModal('rules')">📌 報告ルール</button>
+    <button class="btn secondary" onclick="openModal('sources')">📚 情報ソース</button>
+  </div>
+
+
+  <section>
+    <h2>🌟 主要経済ニュース 5件</h2>
+
+    <div class="news-item">
+      <span class="news-num">1</span>
+      <span class="news-title">日経平均、史上初の6万7000円台到達</span>
+      <div class="news-body">
+        AI関連の「スター銘柄」が市場を牽引。ソフトバンクGがフランスにAIデータセンター設立を発表するなど、AI関連投資が引き続き株価材料となっています。
+      </div>
+      <div class="impact">
+        💹 <strong>株価影響：</strong>AI・半導体・データセンター関連株は引き続き上昇圧力。ただし過熱感から短期調整リスクも。
+      </div>
+    </div>
+
+    <div class="news-item">
+      <span class="news-num">2</span>
+      <span class="news-title">日銀、6月利上げの観測強まる — 政策金利1.0％へ</span>
+      <div class="news-body">
+        6月16日の総裁会見で0.25％追加利上げ予想。原油高に伴う物価上振れリスクへの警戒が背景。
+      </div>
+      <div class="impact">
+        💹 <strong>株価影響：</strong>銀行・保険など金融株はプラス材料。一方、不動産・REIT・高PER成長株には逆風。
+      </div>
+    </div>
+
+    <div class="news-item">
+      <span class="news-num">3</span>
+      <span class="news-title">ドル円、159円台前半で推移 — 構造的円安圧力続く</span>
+      <div class="news-body">
+        市場では155円半ばをコンセンサスとする見方と、160～165円介入観測が交錯。
+      </div>
+      <div class="impact">
+        💹 <strong>株価影響：</strong>自動車・精密機器など輸出関連株に追い風。逆に電力・小売など内需株はコスト増で下押し。
+      </div>
+    </div>
+
+    <div class="news-item">
+      <span class="news-num">4</span>
+      <span class="news-title">中東情勢で原油価格は乱高下後、100ドル前後で推移</span>
+      <div class="news-body">
+        WTIは3月に一時119.5ドルまで急騰後、足元100ドル前後。企業の96.6％が「マイナス影響あり」と回答。
+      </div>
+      <div class="impact">
+        💹 <strong>株価影響：</strong>石油・商社株はプラス。航空・運輸・化学・電力など燃料コスト依存業種は下押し。
+      </div>
+    </div>
+
+    <div class="news-item">
+      <span class="news-num">5</span>
+      <span class="news-title">日本企業のM&Aが活況継続 — 三菱商事の米ガス会社買収完了</span>
+      <div class="news-body">
+        2025年のM&Aは33兆円で7年ぶり最高。三菱商事が約1.2兆円で米ヘイインズビル買収完了。
+      </div>
+      <div class="impact">
+        💹 <strong>株価影響：</strong>M&A当事者（買収側・被買収側）の株価は上昇しやすい。商社・PEファンド関連にも資金流入期待。
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+      🏛️ 税制改正情報（項目別解説）
+      <span style="font-size: 11px; font-weight: normal; color: var(--muted); background: #fffbeb; padding: 4px 10px; border-radius: 12px; border: 1px solid #fde68a;">
+        <button class="detail-btn" style="cursor:default; pointer-events:none; padding: 2px 8px; font-size: 10px;">📖 詳細</button>
+        ボタンで詳細解説を表示
+      </span>
+    </h2>
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+      <label style="font-size: 14px; font-weight: bold; color: var(--primary);">📅 年度選択：</label>
+      <select id="taxYearSelect" onchange="renderTaxTable()" style="padding: 8px 14px; border-radius: 8px; border: 2px solid var(--primary); background: white; font-size: 14px; font-weight: bold; color: var(--primary); cursor: pointer; min-width: 280px;">
+        <!-- JavaScriptで動的生成 -->
+      </select>
+      <span id="taxYearBadge" style="font-size: 12px; padding: 4px 10px; background: var(--positive); color: white; border-radius: 12px; font-weight: bold;">最新</span>
+      <span id="currentFYNote" style="font-size: 12px; color: var(--muted);"></span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28%">項目</th>
+          <th style="width:18%">内容</th>
+          <th style="width:12%">実施時期</th>
+          <th style="width:42%">簡単な説明</th>
+        </tr>
+      </thead>
+      <tbody id="taxTableBody">
+        <!-- JavaScriptで動的に挿入されます -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 詳細モーダル -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="modalTitle">タイトル</h3>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        コンテンツ
+      </div>
+    </div>
+  </div>
+
+
+  <footer>
+    📅 報告日: <span id="footerDate"></span><br>
+    Generated with Claude Code
+  </footer>
+
+</div>
+
+<script>
+  // 自動で今日の日付を表示
+  const today = new Date();
+  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+  const dateStr = `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日（${weekdays[today.getDay()]}）`;
+  document.getElementById('reportDate').textContent = dateStr;
+  document.getElementById('footerDate').textContent = dateStr;
+
+  // 折りたたみ機能
+  function toggleSections() {
+    document.querySelectorAll('.news-body, .impact').forEach(el => {
+      el.style.display = el.style.display === 'none' ? '' : 'none';
+    });
+  }
+
+  // 全文コピー機能
+  function copyAll() {
+    const text = document.body.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      alert('全文をクリップボードにコピーしました');
+    });
+  }
+
+  // 税制改正 詳細データ
+  const taxDetails = {
+    rules: {
+      title: '📌 報告ルール',
+      content: `
+        <h4>📋 定例報告のルール</h4>
+        <ul>
+          <li>毎日 <strong>朝7：00</strong> に報告</li>
+          <li>経済関係の新しいニュースに限る</li>
+          <li>必ず <strong>5件以上</strong> を報告</li>
+          <li>各ニュースに「<strong>株価への影響</strong>」を1行で追記</li>
+          <li>税制改正は項目ごとに <strong>簡単な説明付き</strong>（随時）</li>
+        </ul>
+      `
+    },
+    sources: {
+      title: '📚 情報ソース',
+      content: `
+        <h4>🔗 主な参照先</h4>
+        <div class="source-list" style="background: transparent; padding: 0;">
+          <a href="https://www.nikkei.com/" target="_blank">📰 日本経済新聞</a>
+          <a href="https://www.boj.or.jp/" target="_blank">🏦 日本銀行（BOJ）</a>
+          <a href="https://www.mof.go.jp/tax_policy/tax_reform/outline/fy2026/" target="_blank">📋 財務省 令和8年度税制改正大綱</a>
+          <a href="https://www.nta.go.jp/users/gensen/2026shokuji/index.htm" target="_blank">🍱 国税庁 食事の現物支給に係る所得税の非課税限度額の引上げ</a>
+          <a href="https://www.tdb.co.jp/report/economic/" target="_blank">📊 帝国データバンク 経済レポート</a>
+        </div>
+      `
+    },
+    shukoku: {
+      title: '✈️ 国際観光旅客税（出国税）の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          日本から出国する際に徴収される税金が <strong>1,000円 → 3,000円</strong>（3倍）に引き上げ。<br>
+          施行日：<strong>2026年7月1日</strong> 出国分から
+        </div>
+
+        <h4>💼 会社員への影響</h4>
+        <ul>
+          <li><strong>海外出張時</strong>：航空券代金に上乗せされて徴収されるため、出張経費が増加</li>
+          <li><strong>個人の海外旅行</strong>：家族4人なら 12,000円 の追加負担</li>
+          <li><strong>業務出張</strong>：会社経費で処理されるため個人負担はないが、出張規程の見直しが必要</li>
+        </ul>
+
+        <h4>📋 対象となる出国</h4>
+        <ul>
+          <li>飛行機・船舶で日本を出国する全ての人（日本人・外国人問わず）</li>
+          <li>2歳未満の幼児は対象外</li>
+          <li>乗継のための入国（24時間以内）は対象外</li>
+        </ul>
+
+        <h4>🏢 会社の実務対応</h4>
+        <div class="example-box">
+          <strong>例：年5回海外出張する社員10名の場合</strong><br>
+          増加分：(3,000円 − 1,000円) × 5回 × 10名 = <strong>100,000円/年 のコスト増</strong>
+        </div>
+        <ul>
+          <li>出張旅費規程の改定（出国税の取扱明記）</li>
+          <li>経費精算システムの設定変更</li>
+          <li>航空券手配時の予算見直し</li>
+        </ul>
+      `
+    },
+    nenshu: {
+      title: '💰 年収の壁（178万円）の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          所得税の非課税ラインが <strong>160万円 → 178万円</strong> に引き上げ。<br>
+          物価上昇への対応（8万円）＋中低所得者向け特例（10万円）の合計18万円拡大。
+        </div>
+
+        <h4>💼 会社員への影響</h4>
+        <ul>
+          <li><strong>配偶者がパート・アルバイト</strong>：配偶者の収入が178万円までなら非課税で働ける</li>
+          <li><strong>本人が副業</strong>：本業＋副業の合算所得の控除枠が拡大</li>
+          <li><strong>大学生の子供</strong>：アルバイト収入が増えても扶養から外れにくくなる</li>
+        </ul>
+
+        <h4>📊 壁の種類と影響</h4>
+        <ul>
+          <li><strong>103万円の壁</strong> → 所得税の壁（178万円に緩和）</li>
+          <li><strong>106万円の壁</strong> → 社会保険の壁（別途存在、未改正）</li>
+          <li><strong>130万円の壁</strong> → 扶養範囲（別途存在、未改正）</li>
+          <li><strong>150万円の壁</strong> → 配偶者特別控除の壁（別途存在）</li>
+        </ul>
+
+        <div class="warning-box">
+          ⚠️ <strong>注意</strong>：所得税は緩和されたが、社会保険（106万円・130万円）の壁は残るため、
+          実質的な「働き損」を防ぐには社会保険加入の有無も確認が必要です。
+        </div>
+
+        <h4>🏢 会社の実務対応</h4>
+        <ul>
+          <li>扶養控除等申告書の記載基準の変更</li>
+          <li>パート・アルバイトのシフト調整方針の見直し</li>
+          <li>年末調整時の控除計算の更新</li>
+        </ul>
+      `
+    },
+    jutaku: {
+      title: '🏠 住宅ローン減税の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          住宅ローン控除制度が <strong>5年間延長</strong>（2030年まで利用可能）。<br>
+          子育て世帯・若者夫婦の優遇措置も継続。
+        </div>
+
+        <h4>💼 会社員への影響</h4>
+        <ul>
+          <li><strong>年末ローン残高の0.7％</strong>を所得税から控除（最大13年間）</li>
+          <li><strong>初年度</strong>は確定申告が必要、<strong>2年目以降</strong>は年末調整で対応可</li>
+          <li>所得税で控除しきれない分は<strong>住民税からも控除</strong>可能</li>
+        </ul>
+
+        <h4>📊 控除限度額（住宅の種類別）</h4>
+        <ul>
+          <li><strong>認定長期優良住宅</strong>：最大借入限度 5,000万円（年間最大35万円控除）</li>
+          <li><strong>ZEH水準省エネ住宅</strong>：最大借入限度 4,500万円</li>
+          <li><strong>省エネ基準適合住宅</strong>：最大借入限度 4,000万円</li>
+          <li><strong>その他の住宅</strong>：最大借入限度 3,000万円</li>
+        </ul>
+
+        <h4>👨‍👩‍👧 子育て世帯・若者夫婦への優遇</h4>
+        <div class="example-box">
+          <strong>対象</strong>：19歳未満の子がいる世帯 / 夫婦どちらかが40歳未満<br>
+          → 借入限度額が一般世帯より <strong>500万円 上乗せ</strong>
+        </div>
+
+        <h4>🏢 会社の実務対応</h4>
+        <ul>
+          <li>年末調整時の住宅ローン控除証明書の受付・確認</li>
+          <li>社員から問い合わせがあった際の制度説明</li>
+          <li>福利厚生として住宅取得支援制度との連携検討</li>
+        </ul>
+      `
+    },
+    tsukin: {
+      title: '🚗 通勤手当（マイカー）の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          マイカー・自転車通勤の非課税限度額が大幅拡充。<br>
+          施行：<strong>2026年4月1日</strong>支給分から
+        </div>
+
+        <h4>📊 距離別 非課税限度額（マイカー）</h4>
+        <ul>
+          <li>2km未満：全額課税</li>
+          <li>2km～10km未満：引き上げ</li>
+          <li>10km～15km未満：引き上げ</li>
+          <li>～55km未満：段階的引き上げ</li>
+          <li>55km～65km未満：<strong>新区分</strong></li>
+          <li><strong>65km以上：最大 66,400円／月（新設）</strong></li>
+        </ul>
+
+        <h4>🅿️ 駐車場代の非課税化（新設）</h4>
+        <div class="example-box">
+          自動車・バイク通勤で駐車場料金を常例的に負担している場合<br>
+          → 距離別限度額に加えて <strong>月額5,000円</strong> を上限に非課税
+        </div>
+
+        <h4>🚃 公共交通機関の限度額（変更なし）</h4>
+        <ul>
+          <li>電車・バス通勤：<strong>月15万円</strong>のまま据え置き</li>
+          <li>今回の改正対象は<strong>マイカー・自転車通勤のみ</strong></li>
+        </ul>
+
+        <h4>💼 会社員への影響</h4>
+        <ul>
+          <li><strong>長距離マイカー通勤者</strong>：非課税枠拡大で手取り増</li>
+          <li><strong>駐車場代を自己負担していた人</strong>：月5,000円まで非課税で会社支給可能</li>
+          <li>ガソリン高騰下での実質的な負担軽減</li>
+        </ul>
+
+        <h4>🏢 会社の実務対応</h4>
+        <ul>
+          <li>通勤費規程の見直し（距離区分の細分化）</li>
+          <li>給与計算システムの設定変更</li>
+          <li>長距離通勤者・駐車場代支給者への周知</li>
+          <li>通勤届の再提出（距離・駐車場利用の確認）</li>
+        </ul>
+      `
+    },
+    shokuji: {
+      title: '🍱 食事手当（現物支給）の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          食事の現物支給の非課税限度額が <strong>3,500円 → 7,500円</strong>（2倍以上）に拡大。<br>
+          <strong>42年ぶり</strong>の大改正！「第3の賃上げ」として注目されています。
+        </div>
+
+        <h4>✅ 非課税の2つの条件（両方必須）</h4>
+        <ul>
+          <li>① 従業員が <strong>食事価額の50％以上</strong> を負担</li>
+          <li>② 会社負担額が <strong>月7,500円以下</strong>（消費税抜き）</li>
+        </ul>
+
+        <h4>📊 計算方法</h4>
+        <div class="example-box">
+          <strong>例：月の食事価額15,000円の場合</strong><br>
+          ・社員負担：7,500円（50％）<br>
+          ・会社負担：7,500円（50％）<br>
+          → 両方の条件をクリアして <strong>全額非課税</strong>
+        </div>
+
+        <h4>💡 支給方法別の扱い</h4>
+        <ul>
+          <li>✅ <strong>社員食堂</strong>（自社運営）：条件クリアで非課税</li>
+          <li>✅ <strong>仕出し弁当の配送</strong>：条件クリアで非課税</li>
+          <li>✅ <strong>食事券（チケットレストラン等）</strong>：条件クリアで非課税</li>
+          <li>✅ <strong>設置型社食</strong>（オフィスおかん等）：条件クリアで非課税</li>
+          <li>❌ <strong>現金支給</strong>：原則全額課税（深夜勤務除く）</li>
+        </ul>
+
+        <h4>💰 給与アップとの比較（月7,500円相当の場合）</h4>
+        <div class="example-box">
+          <strong>給与で7,500円増額</strong><br>
+          → 社員の手取り増：約5,500円 ／ 会社の総コスト：約8,700円<br><br>
+          <strong>食事補助で7,500円支給</strong><br>
+          → 社員の手取り増：<strong>7,500円</strong> ／ 会社の総コスト：<strong>7,500円</strong><br>
+          → 双方にメリットのある制度
+        </div>
+
+        <h4>💼 会社員への影響</h4>
+        <ul>
+          <li>年間最大 <strong>90,000円分</strong> の実質的な手取り増</li>
+          <li>所得税・住民税・社会保険料の負担なし</li>
+          <li>物価高騰下での生活支援になる</li>
+        </ul>
+
+        <div class="warning-box">
+          ⚠️ <strong>注意</strong>：会社負担が7,500円を1円でも超えると <strong>全額</strong>が給与課税になります（差額のみではない）。
+        </div>
+      `
+    },
+    // ========== 令和7年度（2025年度）詳細 ==========
+    bouei: {
+      title: '🛡️ 防衛特別法人税の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          法人税額の <strong>4％</strong> を上乗せ徴収する新税。<br>
+          施行：<strong>2026年4月1日</strong> 以降開始の事業年度から
+        </div>
+
+        <h4>💼 企業への影響</h4>
+        <ul>
+          <li><strong>基礎控除</strong>：法人税額500万円分は控除（中小企業は実質負担少）</li>
+          <li><strong>大企業</strong>：法人税負担が増加</li>
+          <li><strong>赤字企業</strong>：法人税ゼロの場合、防衛特別税もゼロ</li>
+        </ul>
+
+        <h4>🎯 目的</h4>
+        <ul>
+          <li>防衛力強化に向けた財源確保</li>
+          <li>2027年度以降、防衛費GDP比2％達成のための恒久財源</li>
+          <li>たばこ税・所得税の防衛増税と合わせた財源パッケージ</li>
+        </ul>
+
+        <h4>🏢 実務対応</h4>
+        <ul>
+          <li>法人税申告書の様式変更に対応</li>
+          <li>税効果会計の繰延税金資産・負債の計算見直し</li>
+          <li>中期経営計画への織り込み</li>
+        </ul>
+      `
+    },
+    ideco: {
+      title: '💰 iDeCo拠出限度額の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          iDeCo（個人型確定拠出年金）の月額拠出限度額が大幅拡大。<br>
+          施行：<strong>2027年1月～</strong>
+        </div>
+
+        <h4>📊 加入者区分別の限度額変更</h4>
+        <ul>
+          <li><strong>自営業者</strong>：月68,000円 → <strong>75,000円</strong></li>
+          <li><strong>会社員（企業年金なし）</strong>：月23,000円 → <strong>62,000円</strong></li>
+          <li><strong>会社員（企業年金あり）</strong>：月20,000円 → <strong>62,000円</strong>（合算）</li>
+          <li><strong>公務員</strong>：月12,000円 → <strong>62,000円</strong></li>
+        </ul>
+
+        <h4>💼 会社員への影響</h4>
+        <ul>
+          <li>年間 <strong>最大744,000円</strong> を非課税で老後資金に積立可能</li>
+          <li>掛金は <strong>全額所得控除</strong>（所得税・住民税が安くなる）</li>
+          <li>運用益も非課税、受取時も退職所得控除等で税優遇</li>
+        </ul>
+
+        <h4>🎯 活用イメージ</h4>
+        <div class="example-box">
+          年収600万円の会社員が月62,000円拠出する場合<br>
+          年間拠出：744,000円<br>
+          税軽減効果（所得税20%＋住民税10%）：<strong>約223,200円/年</strong>
+        </div>
+      `
+    },
+    chinage: {
+      title: '📈 賃上げ促進税制（繰越控除）の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          赤字企業でも将来の黒字時に賃上げ控除を活用できる <strong>繰越控除制度</strong> を新設。<br>
+          施行：<strong>2025年4月1日</strong> 以降開始の事業年度から
+        </div>
+
+        <h4>🏢 制度の仕組み</h4>
+        <ul>
+          <li>賃上げ実施年度は赤字でも、控除権利を <strong>最大5年間繰越</strong></li>
+          <li>黒字化した年度で過去の賃上げ分を一括控除可能</li>
+          <li>スタートアップ・赤字成長企業の人材投資を促進</li>
+        </ul>
+
+        <h4>📊 控除率（中小企業の場合）</h4>
+        <ul>
+          <li>給与等支給額が <strong>1.5%以上</strong> 増 → 控除率 <strong>15%</strong></li>
+          <li>給与等支給額が <strong>2.5%以上</strong> 増 → 控除率 <strong>30%</strong></li>
+          <li>教育訓練費を一定割合以上増加 → <strong>+10%</strong> 上乗せ</li>
+          <li>くるみん／えるぼし認定 → <strong>+5%</strong> 上乗せ</li>
+          <li>最大 <strong>45%</strong> の税額控除</li>
+        </ul>
+
+        <h4>💼 経営への効果</h4>
+        <ul>
+          <li>赤字スタートアップでも積極的な賃上げが可能に</li>
+          <li>「将来の黒字化を見越した賃上げ」が現実的な選択肢に</li>
+          <li>人材獲得競争力の強化</li>
+        </ul>
+      `
+    },
+    ecohome: {
+      title: '🏠 子育てエコホーム支援の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          子育て世帯・若者夫婦の住宅ローン控除の借入限度額に <strong>上乗せ措置</strong>。<br>
+          施行：<strong>2025年適用</strong>
+        </div>
+
+        <h4>👨‍👩‍👧 対象世帯</h4>
+        <ul>
+          <li><strong>子育て世帯</strong>：19歳未満の子がいる世帯</li>
+          <li><strong>若者夫婦世帯</strong>：夫婦どちらかが40歳未満</li>
+        </ul>
+
+        <h4>📊 借入限度額の上乗せ（一般世帯比）</h4>
+        <ul>
+          <li><strong>認定長期優良住宅</strong>：4,500万円 → <strong>5,000万円</strong>（+500万円）</li>
+          <li><strong>ZEH水準省エネ住宅</strong>：3,500万円 → <strong>4,500万円</strong>（+1,000万円）</li>
+          <li><strong>省エネ基準適合住宅</strong>：3,000万円 → <strong>4,000万円</strong>（+1,000万円）</li>
+        </ul>
+
+        <h4>💼 会社員への影響</h4>
+        <div class="example-box">
+          認定長期優良住宅5,000万円を借入する子育て世帯の場合<br>
+          年末残高の0.7% × 13年 = <strong>最大 約455万円の控除</strong>
+        </div>
+
+        <h4>🎯 目的</h4>
+        <ul>
+          <li>少子化対策・子育て支援</li>
+          <li>省エネ住宅の普及促進</li>
+          <li>若年層の持ち家促進</li>
+        </ul>
+      `
+    },
+    nisa: {
+      title: '📊 NISA見直しの詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          新NISA制度の利便性向上と運用環境の整備。<br>
+          段階的に適用される複数の改正項目を含みます。
+        </div>
+
+        <h4>📊 新NISA制度の基本（既存）</h4>
+        <ul>
+          <li><strong>つみたて投資枠</strong>：年120万円</li>
+          <li><strong>成長投資枠</strong>：年240万円</li>
+          <li>合計 <strong>年360万円</strong> まで非課税投資可能</li>
+          <li>生涯非課税限度額：<strong>1,800万円</strong></li>
+          <li>非課税期間：<strong>無期限</strong></li>
+        </ul>
+
+        <h4>🔄 令和7年度の主な見直し内容</h4>
+        <ul>
+          <li>対象商品の範囲明確化（ETF・REITなど）</li>
+          <li>つみたて投資枠と成長投資枠の併用環境整備</li>
+          <li>金融機関変更手続きの簡素化</li>
+          <li>子供向け制度（旧ジュニアNISA）の継続検討</li>
+        </ul>
+
+        <h4>💼 会社員への影響</h4>
+        <ul>
+          <li>長期投資の選択肢が広がる</li>
+          <li>iDeCoとの併用で老後資金対策が強化</li>
+          <li>運用益が無期限非課税のため、複利効果を最大化</li>
+        </ul>
+      `
+    },
+    chusho_toushi: {
+      title: '🏭 中小企業投資促進税制の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          中小企業の設備投資にかかる特別償却・税額控除制度を <strong>2年間延長</strong>。<br>
+          適用期限：<strong>2027年3月末まで</strong>
+        </div>
+
+        <h4>🏢 対象企業</h4>
+        <ul>
+          <li>資本金1億円以下の中小企業</li>
+          <li>従業員1,000人以下の個人事業主</li>
+        </ul>
+
+        <h4>📊 対象設備と優遇内容</h4>
+        <ul>
+          <li><strong>機械装置</strong>：取得価額160万円以上</li>
+          <li><strong>ソフトウェア</strong>：取得価額70万円以上</li>
+          <li><strong>車両運搬具</strong>：取得価額3.5t以上の貨物車等</li>
+          <li><strong>特別償却</strong>：取得価額の30%</li>
+          <li><strong>税額控除</strong>：取得価額の7%（資本金3,000万円以下）</li>
+        </ul>
+
+        <h4>💼 経営メリット</h4>
+        <ul>
+          <li>初年度に大幅な償却で税負担軽減</li>
+          <li>キャッシュフロー改善</li>
+          <li>DX・自動化投資の促進</li>
+        </ul>
+      `
+    },
+    kekkon: {
+      title: '💒 結婚・子育て資金贈与の非課税措置の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          直系尊属（祖父母・親）からの結婚・子育て資金一括贈与の非課税特例を <strong>2年延長</strong>。<br>
+          適用期限：<strong>2027年3月末まで</strong>
+        </div>
+
+        <h4>📊 非課税の限度額</h4>
+        <ul>
+          <li><strong>結婚・子育て資金</strong>：最大 <strong>1,000万円</strong>（うち結婚関係は300万円）</li>
+          <li><strong>教育資金贈与</strong>：最大 <strong>1,500万円</strong>（別制度・別途継続）</li>
+        </ul>
+
+        <h4>👨‍👩‍👧 対象者</h4>
+        <ul>
+          <li>受贈者：<strong>18歳以上50歳未満</strong></li>
+          <li>贈与者：直系尊属（祖父母・親）</li>
+          <li>受贈者の合計所得：1,000万円以下</li>
+        </ul>
+
+        <h4>💼 対象となる費用</h4>
+        <ul>
+          <li><strong>結婚関連</strong>：挙式・新居家賃・引越費用（300万円まで）</li>
+          <li><strong>妊娠・出産</strong>：不妊治療・健診・分娩費用</li>
+          <li><strong>育児</strong>：保育料・ベビーシッター費用・治療費</li>
+        </ul>
+
+        <h4>⚠️ 注意事項</h4>
+        <div class="warning-box">
+          ・金融機関に専用口座を開設して管理が必要<br>
+          ・領収書等の提出が必要<br>
+          ・使い切れずに残った場合、贈与税課税対象に
+        </div>
+      `
+    },
+    // ========== 令和6年度（2024年度）詳細 ==========
+    teigaku: {
+      title: '💴 定額減税の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          物価高対策として、所得税3万円＋住民税1万円の <strong>合計4万円</strong> を1人あたり減税。<br>
+          施行：<strong>2024年6月～</strong>
+        </div>
+
+        <h4>👨‍👩‍👧 対象者</h4>
+        <ul>
+          <li><strong>本人</strong>：1人あたり4万円減税</li>
+          <li><strong>扶養家族</strong>：1人あたり4万円減税（同一生計配偶者・扶養親族）</li>
+          <li><strong>所得制限</strong>：合計所得1,805万円以下（給与収入2,000万円相当）</li>
+        </ul>
+
+        <h4>📊 減税方法（会社員の場合）</h4>
+        <ul>
+          <li><strong>所得税</strong>：2024年6月以降の給与から順次控除</li>
+          <li><strong>住民税</strong>：2024年6月分を徴収せず、7月以降11ヶ月で調整</li>
+          <li>給与明細に「定額減税額」が表示される</li>
+        </ul>
+
+        <h4>💼 例：扶養2人の会社員</h4>
+        <div class="example-box">
+          本人＋扶養2人 = 3人 × 4万円 = <strong>12万円減税</strong><br>
+          所得税9万円＋住民税3万円が控除される
+        </div>
+
+        <h4>🏢 会社の実務対応</h4>
+        <ul>
+          <li>給与システムへの定額減税モジュール導入</li>
+          <li>従業員から扶養親族の申告書受領</li>
+          <li>給与明細への減税額表示対応</li>
+          <li>年末調整での精算処理</li>
+        </ul>
+      `
+    },
+    seimei: {
+      title: '🛡️ 生命保険料控除（子育て世帯）の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          23歳未満の扶養親族がいる場合、一般生命保険料控除の上限が <strong>4万円 → 6万円</strong> に拡大。<br>
+          施行：<strong>2024年適用</strong>
+        </div>
+
+        <h4>👨‍👩‍👧 対象者</h4>
+        <ul>
+          <li>23歳未満の扶養親族（子供）がいる納税者</li>
+          <li>一般の生命保険に加入している人</li>
+        </ul>
+
+        <h4>📊 控除限度額の比較</h4>
+        <ul>
+          <li><strong>一般世帯</strong>：上限4万円（変更なし）</li>
+          <li><strong>子育て世帯</strong>：上限 <strong>6万円</strong>（+2万円）</li>
+          <li>介護医療・個人年金保険料控除は変更なし</li>
+        </ul>
+
+        <h4>💼 税軽減効果（所得税率20%の場合）</h4>
+        <div class="example-box">
+          追加控除2万円 × 所得税率20% = <strong>年4,000円の税軽減</strong><br>
+          住民税も合わせると年6,000円程度の負担減
+        </div>
+
+        <h4>🎯 目的</h4>
+        <ul>
+          <li>子育て世帯の生命保険加入促進</li>
+          <li>万一の備えを充実させる支援</li>
+          <li>少子化対策の一環</li>
+        </ul>
+      `
+    },
+    jutaku_kosodate: {
+      title: '🏠 住宅ローン控除（子育て世帯特例）の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          子育て世帯・若者夫婦に対する住宅ローン控除の借入限度額を上乗せ。<br>
+          施行：<strong>2024年適用</strong>
+        </div>
+
+        <h4>👨‍👩‍👧 対象世帯</h4>
+        <ul>
+          <li><strong>子育て世帯</strong>：19歳未満の子がいる世帯</li>
+          <li><strong>若者夫婦世帯</strong>：夫婦どちらかが40歳未満</li>
+        </ul>
+
+        <h4>📊 借入限度額（子育て世帯特例）</h4>
+        <ul>
+          <li><strong>認定長期優良住宅</strong>：4,500万円 → <strong>5,000万円</strong></li>
+          <li><strong>ZEH水準省エネ住宅</strong>：3,500万円 → <strong>4,500万円</strong></li>
+          <li><strong>省エネ基準適合住宅</strong>：3,000万円 → <strong>4,000万円</strong></li>
+        </ul>
+
+        <h4>💼 控除内容</h4>
+        <ul>
+          <li>控除率：年末ローン残高の <strong>0.7%</strong></li>
+          <li>控除期間：<strong>最長13年間</strong></li>
+          <li>例：5,000万円借入 → 年最大35万円 × 13年 = <strong>最大455万円</strong></li>
+        </ul>
+      `
+    },
+    chinage_2024: {
+      title: '📈 賃上げ促進税制（中堅企業区分）の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          従業員2,000人以下の <strong>中堅企業向け新区分</strong> を新設。<br>
+          施行：<strong>2024年4月～</strong>
+        </div>
+
+        <h4>🏢 企業区分</h4>
+        <ul>
+          <li><strong>中小企業</strong>：資本金1億円以下、最大45%控除</li>
+          <li><strong>中堅企業（新設）</strong>：従業員2,000人以下、最大35%控除</li>
+          <li><strong>大企業</strong>：従業員2,000人超、最大35%控除</li>
+        </ul>
+
+        <h4>📊 中堅企業の控除率</h4>
+        <ul>
+          <li>給与等支給額が <strong>3%以上</strong> 増 → 控除率10%</li>
+          <li>給与等支給額が <strong>4%以上</strong> 増 → 控除率25%</li>
+          <li>教育訓練費10%以上増 → +5%</li>
+          <li>くるみん／プラチナくるみん認定 → +5%</li>
+          <li><strong>最大35%</strong> の税額控除</li>
+        </ul>
+
+        <h4>🎯 改正の目的</h4>
+        <ul>
+          <li>中堅企業の賃上げ促進</li>
+          <li>大企業と中小企業の中間層の支援強化</li>
+          <li>地域経済の活性化</li>
+        </ul>
+      `
+    },
+    stock_option: {
+      title: '📊 ストックオプション税制の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          税制適格ストックオプションの権利行使価額の年間上限を <strong>1,200万円 → 2,400万円</strong> に倍増。<br>
+          施行：<strong>2024年適用</strong>
+        </div>
+
+        <h4>🚀 制度の背景</h4>
+        <ul>
+          <li>スタートアップの人材獲得競争力強化</li>
+          <li>米国IT企業との比較で日本の上限が低かった</li>
+          <li>優秀人材の海外流出防止</li>
+        </ul>
+
+        <h4>📊 適格要件</h4>
+        <ul>
+          <li>付与対象：取締役・従業員（社外協力者は別途）</li>
+          <li>権利行使期間：付与決議から2年経過後10年以内（一定要件で15年）</li>
+          <li>年間権利行使価額：<strong>2,400万円以下</strong>（改正後）</li>
+        </ul>
+
+        <h4>💼 税制メリット</h4>
+        <ul>
+          <li>権利行使時の所得税課税なし</li>
+          <li>株式売却時に <strong>譲渡所得</strong>（約20%）として一度だけ課税</li>
+          <li>給与所得（最高55%）との税率差で大幅な節税</li>
+        </ul>
+
+        <div class="example-box">
+          <strong>例：行使価額2,000万円→売却時8,000万円の場合</strong><br>
+          適格：差益6,000万円 × 約20% = 約1,200万円の税負担<br>
+          非適格：給与所得扱いで最大55% = 約3,300万円の税負担<br>
+          → <strong>約2,100万円の節税効果</strong>
+        </div>
+      `
+    },
+    shinrin: {
+      title: '🌲 森林環境税の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          森林整備の財源として、個人住民税に <strong>1人あたり年1,000円</strong> を上乗せ徴収。<br>
+          施行：<strong>2024年度～徴収開始</strong>
+        </div>
+
+        <h4>👥 対象者</h4>
+        <ul>
+          <li>国内に住所がある個人（住民税が課税される人）</li>
+          <li>非課税対象者は徴収対象外</li>
+        </ul>
+
+        <h4>📊 徴収方法</h4>
+        <ul>
+          <li>個人住民税と一緒に徴収</li>
+          <li>会社員：給与から特別徴収（毎月引落し）</li>
+          <li>自営業者：普通徴収（年4回納付）</li>
+        </ul>
+
+        <h4>🌳 使途（森林環境譲与税）</h4>
+        <ul>
+          <li>市町村に配分され、森林整備に使用</li>
+          <li>間伐・人材育成・木材利用促進</li>
+          <li>森林の有する公益的機能の維持増進</li>
+        </ul>
+
+        <h4>💼 会社の実務対応</h4>
+        <ul>
+          <li>給与計算ソフトの自動アップデートで対応済</li>
+          <li>住民税の通知書に森林環境税分が記載される</li>
+          <li>従業員への説明資料の準備</li>
+        </ul>
+      `
+    },
+    platform: {
+      title: '💻 プラットフォーム課税の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          海外事業者のデジタルサービスについて、プラットフォーム事業者が消費税を <strong>納付主体</strong> となる制度。<br>
+          施行：<strong>2025年4月～</strong>
+        </div>
+
+        <h4>🌐 対象サービス</h4>
+        <ul>
+          <li>アプリストア経由のアプリ・コンテンツ販売</li>
+          <li>動画・音楽配信サービス</li>
+          <li>電子書籍・オンライン講座</li>
+          <li>その他、消費者向けデジタルサービス</li>
+        </ul>
+
+        <h4>🏢 対象プラットフォーム</h4>
+        <ul>
+          <li>Apple（App Store）</li>
+          <li>Google（Google Play）</li>
+          <li>Amazon（Kindle等）</li>
+          <li>その他の特定プラットフォーム事業者</li>
+        </ul>
+
+        <h4>💡 改正の意義</h4>
+        <ul>
+          <li>海外事業者から消費税が確実に徴収可能に</li>
+          <li>国内事業者との競争条件の公平化</li>
+          <li>消費税の課税漏れ防止</li>
+          <li>年間 数百億円の税収増加見込み</li>
+        </ul>
+
+        <h4>💼 一般消費者への影響</h4>
+        <ul>
+          <li>支払い金額自体は変わらない（既に消費税は徴収済）</li>
+          <li>領収書の発行者がプラットフォーム会社に変更</li>
+          <li>インボイス対応の改善</li>
+        </ul>
+      `
+    },
+    yashoku: {
+      title: '🌙 夜勤者への夜食代の詳細',
+      content: `
+        <h4>📌 改正のポイント</h4>
+        <div class="highlight">
+          深夜勤務者への現金支給の非課税枠が <strong>1食300円 → 650円</strong>（2倍以上）に拡大。<br>
+          施行：<strong>2026年4月1日</strong>支給分から
+        </div>
+
+        <h4>✅ 非課税の3つの条件</h4>
+        <ul>
+          <li>① 対象者：<strong>深夜勤務（22時～翌5時）に勤務時間として従事</strong>している社員</li>
+          <li>② 支給額：<strong>1食650円以下</strong>（消費税抜き）</li>
+          <li>③ 支給理由：会社に調理施設・社員食堂がないなど、現物支給が困難</li>
+        </ul>
+
+        <h4>📋 実務上の特徴</h4>
+        <div class="example-box">
+          <strong>レシート・領収書は不要！</strong><br>
+          ・定額（1食650円以内）の一律支給でOK<br>
+          ・使途の確認も不要<br>
+          ・勤務記録（深夜勤務の事実）があればOK
+        </div>
+
+        <h4>💼 会社員への影響</h4>
+        <ul>
+          <li>夜勤時の食事代が <strong>実質ゼロ円</strong>に</li>
+          <li>所得税・社会保険料の負担なし</li>
+          <li>レシート提出など面倒な手続きが不要</li>
+        </ul>
+
+        <h4>🏢 推奨される運用フロー</h4>
+        <ul>
+          <li>① 勤務シフトで深夜勤務該当日を確定</li>
+          <li>② 該当日数 × 650円 を給与計算ソフトに入力</li>
+          <li>③ 給与と一緒に「夜食手当」として支給</li>
+          <li>④ レシート回収・実費確認は不要</li>
+        </ul>
+
+        <div class="warning-box">
+          ⚠️ <strong>注意事項</strong>
+          <ul style="margin-top:8px;">
+            <li>残業で22時を超えただけは <strong>対象外</strong>（通常残業扱い）</li>
+            <li>月単位での一律支給（例：月2万円）は <strong>全額課税</strong></li>
+            <li>650円を超える場合（例：700円）は <strong>全額が課税</strong>（差額の50円ではない）</li>
+            <li>昼間勤務者への夜食代は <strong>対象外</strong></li>
+          </ul>
+        </div>
+      `
+    }
+  };
+
+  // モーダル開閉
+  function openModal(key) {
+    const data = taxDetails[key];
+    if (!data) return;
+    document.getElementById('modalTitle').textContent = data.title;
+    document.getElementById('modalBody').innerHTML = data.content;
+    document.getElementById('modalOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(event) {
+    if (event && event.target.closest('.modal') && !event.target.classList.contains('modal-close')) return;
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  // Escキーで閉じる
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ========================================
+  // 税制改正データ（年度別）
+  // ========================================
+  // 注: badge / badgeColor は自動判定するため省略可
+  const taxReformData = {
+    reiwa8: {
+      label: '令和8年度（2026年度）',
+      westernYear: 2026,
+      items: [
+        { name: '国際観光旅客税（出国税）', content: '1,000円 → <span class="tax-amount">3,000円</span>', date: '2026年7月', desc: '日本から出国する際に1人3,000円徴収。海外出張経費が増加し、出張規程の見直しが必要。', detail: 'shukoku' },
+        { name: '年収の壁', content: '160万円 → <span class="tax-amount">178万円</span>', date: '適用中', desc: '所得税の非課税枠拡大。パート・アルバイトの就労調整が緩和され、人手不足対策に寄与。', detail: 'nenshu' },
+        { name: '自動車税・環境性能割', content: '<span class="tax-amount">廃止</span>', date: '2026年3月末', desc: '新車購入時の税負担が軽減。自動車販売・カーリース業界にプラス。', detail: null },
+        { name: '住宅ローン減税', content: '5年間延長・要件緩和', date: '適用中', desc: '住宅取得時の所得税控除が継続。住宅・建設業界の需要下支え効果。', detail: 'jutaku' },
+        { name: '暗号資産取引', content: '分離課税導入', date: '改正適用', desc: '株式と同じ20.315％の分離課税に。最大55％の総合課税から大幅減税で投資環境改善。', detail: null },
+        { name: '通勤手当（マイカー）', content: '65km以上の新区分追加', date: '2026年4月', desc: '長距離マイカー通勤の非課税枠拡大（最大66,400円/月）。駐車場代も月5,000円まで非課税に。', detail: 'tsukin' },
+        { name: '食事手当（現物支給）', content: '3,500円 → <span class="tax-amount">7,500円</span>', date: '2026年4月', desc: '42年ぶりの大改正。社員食堂・弁当・食事チケットの非課税枠が倍以上に拡大。「第3の賃上げ」として注目。', detail: 'shokuji' },
+        { name: '夜勤者への夜食代', content: '300円 → <span class="tax-amount">650円</span>', date: '2026年4月', desc: '深夜勤務者（22時～翌5時）への現金支給の非課税枠が倍増。レシート不要で給与計算に組込可能。', detail: 'yashoku' }
+      ]
+    },
+    reiwa7: {
+      label: '令和7年度（2025年度）',
+      westernYear: 2025,
+      items: [
+        { name: '防衛特別法人税', content: '法人税額の4％を付加', date: '2026年4月～', desc: '防衛財源確保のため、法人税に上乗せ。中小企業は基礎控除500万円があり実質負担は限定的。', detail: 'bouei' },
+        { name: 'iDeCo拠出限度額', content: '月23,000円 → <span class="tax-amount">62,000円</span>', date: '2027年1月～', desc: '自営業者・会社員のiDeCo拠出枠が大幅拡大。老後資金形成支援を強化。', detail: 'ideco' },
+        { name: '賃上げ促進税制', content: '繰越控除制度の新設', date: '2025年4月～', desc: '黒字化前の赤字企業も将来賃上げ控除を活用可能に。最大5年間繰越可能。', detail: 'chinage' },
+        { name: '子育てエコホーム支援', content: '住宅ローン控除の上乗せ', date: '2025年適用', desc: '子育て世帯・若者夫婦向けの住宅ローン減税の借入限度額を上乗せ（最大500万円）。', detail: 'ecohome' },
+        { name: 'NISA見直し', content: '対象拡大の継続検討', date: '段階的適用', desc: '新NISA制度の利便性向上、つみたて投資枠と成長投資枠の併用環境を整備。', detail: 'nisa' },
+        { name: '中小企業投資促進税制', content: '2年間延長', date: '2027年3月末まで', desc: '設備投資の特別償却・税額控除制度を延長。中小企業の生産性向上を支援。', detail: 'chusho_toushi' },
+        { name: '結婚・子育て資金贈与', content: '非課税措置の延長', date: '2027年3月末まで', desc: '直系尊属からの結婚・子育て資金一括贈与の非課税特例を2年延長。', detail: 'kekkon' }
+      ]
+    },
+    reiwa6: {
+      label: '令和6年度（2024年度）',
+      westernYear: 2024,
+      items: [
+        { name: '定額減税', content: '所得税3万円＋住民税1万円', date: '2024年6月～', desc: '物価高対策として1人あたり計4万円を減税。扶養家族分も対象。本人と扶養家族の人数分を控除。', detail: 'teigaku' },
+        { name: '生命保険料控除', content: '子育て世帯の上限拡大', date: '2024年適用', desc: '23歳未満の扶養がいる場合、一般生命保険料控除の上限が4万円→6万円に拡大。', detail: 'seimei' },
+        { name: '住宅ローン控除', content: '子育て世帯特例新設', date: '2024年適用', desc: '子育て世帯・若者夫婦の借入限度額を上乗せ（認定住宅5,000万円など）。', detail: 'jutaku_kosodate' },
+        { name: '賃上げ促進税制', content: '中堅企業向け新区分', date: '2024年4月～', desc: '従業員2,000人以下の中堅企業区分を新設。最大35％の税額控除可能に。', detail: 'chinage_2024' },
+        { name: 'ストックオプション税制', content: '権利行使価額上限拡大', date: '2024年適用', desc: '税制適格ストックオプションの権利行使価額上限を1,200万円→2,400万円に拡大。', detail: 'stock_option' },
+        { name: '森林環境税', content: '個人住民税1人1,000円', date: '2024年度～徴収開始', desc: '森林整備の財源確保のため、個人住民税に1,000円が上乗せされて徴収開始。', detail: 'shinrin' },
+        { name: 'プラットフォーム課税', content: '消費税の徴収主体変更', date: '2025年4月～', desc: '海外事業者のデジタルサービスについて、プラットフォーム事業者が消費税を納付する制度に。', detail: 'platform' }
+      ]
+    }
+  };
+
+  // 現在の日本の年度（4月～翌3月）を取得
+  function getCurrentFiscalYear() {
+    const now = new Date();
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear();
+    return month >= 4 ? year : year - 1;
+  }
+
+  // 年度バッジを判定（現在の年度との差分から）
+  function getBadgeInfo(westernYear) {
+    const currentFY = getCurrentFiscalYear();
+    const diff = currentFY - westernYear;
+    if (diff < 0) return { label: '予定', color: '#3b82f6' };       // 未来の改正
+    if (diff === 0) return { label: '最新', color: '#16a34a' };     // 今の年度
+    if (diff === 1) return { label: '前年度', color: '#64748b' };   // 1年前
+    return { label: '過去', color: '#94a3b8' };                     // 2年以上前
+  }
+
+  // データ未追加の年度を判定（最新データが今年度より古い場合）
+  function getMissingYearWarning() {
+    const currentFY = getCurrentFiscalYear();
+    const years = Object.values(taxReformData).map(d => d.westernYear);
+    const latestData = Math.max(...years);
+    if (latestData < currentFY) {
+      return `⚠️ 令和${currentFY - 2018}年度のデータ未追加（Claudeに更新を依頼してください）`;
+    }
+    return '';
+  }
+
+  // ドロップダウンを動的に生成
+  function buildYearDropdown() {
+    const select = document.getElementById('taxYearSelect');
+    const entries = Object.entries(taxReformData);
+    // 西暦の降順（新しい順）でソート
+    entries.sort((a, b) => b[1].westernYear - a[1].westernYear);
+    let html = '';
+    entries.forEach(([key, data]) => {
+      const badge = getBadgeInfo(data.westernYear);
+      const suffix = badge.label === '最新' ? ' ※最新' : ` （${badge.label}）`;
+      html += `<option value="${key}">${data.label}税制改正${suffix}</option>`;
+    });
+    select.innerHTML = html;
+  }
+
+  // 今年度に該当するデータキーを取得（なければ最も新しいデータ）
+  function getDefaultYearKey() {
+    const currentFY = getCurrentFiscalYear();
+    const entries = Object.entries(taxReformData);
+    // 1. 今年度と一致するデータがあればそれを選択
+    const current = entries.find(([k, d]) => d.westernYear === currentFY);
+    if (current) return current[0];
+    // 2. なければ最も新しいデータを選択
+    entries.sort((a, b) => b[1].westernYear - a[1].westernYear);
+    return entries[0][0];
+  }
+
+  // 税制改正テーブルを描画
+  function renderTaxTable() {
+    const select = document.getElementById('taxYearSelect');
+    const tbody = document.getElementById('taxTableBody');
+    const badge = document.getElementById('taxYearBadge');
+    const note = document.getElementById('currentFYNote');
+    const year = select.value;
+    const data = taxReformData[year];
+    if (!data) return;
+
+    // バッジ自動判定
+    const badgeInfo = getBadgeInfo(data.westernYear);
+    badge.textContent = badgeInfo.label;
+    badge.style.background = badgeInfo.color;
+
+    // 年度情報メモ
+    const currentFY = getCurrentFiscalYear();
+    const warning = getMissingYearWarning();
+    note.innerHTML = warning
+      ? `<span style="color:#d97706;font-weight:bold;">${warning}</span>`
+      : `（現在の年度：令和${currentFY - 2018}年度／${currentFY}年度）`;
+
+    // テーブル本体生成
+    let html = '';
+    data.items.forEach(item => {
+      const detailBtn = item.detail
+        ? `<button class="detail-btn" onclick="openModal('${item.detail}')">📖 詳細</button>`
+        : '';
+      html += `
+        <tr>
+          <td data-label="項目">
+            <span class="tax-item">${item.name}</span>
+            ${detailBtn}
+          </td>
+          <td data-label="内容">${item.content}</td>
+          <td data-label="時期">${item.date}</td>
+          <td data-label="説明">${item.desc}</td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+  }
+
+  // ハンバーガーメニューの開閉
+  function toggleToolbar() {
+    const toolbar = document.getElementById('toolbar');
+    const overlay = document.getElementById('toolbarOverlay');
+    toolbar.classList.toggle('open');
+    overlay.classList.toggle('active');
+  }
+  // ツールバー内のボタンをタップしたら自動で閉じる（スマホのみ）
+  document.querySelectorAll('#toolbar .btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        setTimeout(() => {
+          document.getElementById('toolbar').classList.remove('open');
+          document.getElementById('toolbarOverlay').classList.remove('active');
+        }, 100);
+      }
+    });
+  });
+
+  // 初期化
+  buildYearDropdown();
+  document.getElementById('taxYearSelect').value = getDefaultYearKey();
+  renderTaxTable();
+
+  // Service Worker 登録（PWA対応）
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+</script>
+
+</body>
+</html>

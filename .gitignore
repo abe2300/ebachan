@@ -1,0 +1,14 @@
+# Netlify と重複するため除外（GitHub経由で公開するため）
+公開用/
+
+# Python キャッシュ
+__pycache__/
+*.pyc
+
+# OS 関連
+.DS_Store
+Thumbs.db
+
+# 一時ファイル
+*.tmp
+*.bak
