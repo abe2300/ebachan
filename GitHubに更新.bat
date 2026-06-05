@@ -2,7 +2,7 @@
 chcp 932 > /dev/null
 cd /d "%~dp0"
 echo ===============================================
-echo  GitHubに更新をPushしてNetlifyに自動公開
+echo  GitHubに更新をPushしてGitHub Pagesに自動公開
 echo ===============================================
 echo.
 
@@ -41,8 +41,8 @@ git push
 if errorlevel 0 (
   echo.
   echo ===============================================
-  echo  Push成功! Netlifyが自動デプロイ中...
-  echo  約30秒で https://teirei-houkoku.netlify.app に反映されます
+  echo  Push成功! GitHub Pagesが自動デプロイ中...
+  echo  約30秒で https://abe2300.github.io/ebachan/ に反映されます
   echo ===============================================
 ) else (
   echo.

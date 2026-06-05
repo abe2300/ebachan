@@ -18,7 +18,7 @@ echo 【作業手順】
 echo   1. Claude Codeを起動 (本BATが自動起動)
 echo   2. 「定例報告」と入力してHTMLを更新してもらう
 echo   3. 完了したらこのウィンドウでEnterキーを押す
-echo   4. 自動でGitHubにpushしてNetlifyに公開
+echo   4. 自動でGitHubにpushしてGitHub Pagesに公開
 echo.
 echo ===============================================
 echo.
@@ -34,7 +34,7 @@ if errorlevel 1 (
 echo.
 echo ===============================================
 echo  作業完了後、このウィンドウでEnterキーを押してください
-echo  -> 自動でGitHubにpushしてNetlifyに公開します
+echo  -> 自動でGitHubにpushしてGitHub Pagesに公開します
 echo ===============================================
 pause >/dev/null
 
@@ -71,7 +71,7 @@ if errorlevel 0 (
   echo.
   echo ===============================================
   echo  Push成功!
-  echo  数秒後: https://teirei-houkoku.netlify.app
+  echo  数秒後: https://abe2300.github.io/ebachan/
   echo ===============================================
 ) else (
   echo.
