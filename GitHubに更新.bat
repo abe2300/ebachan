@@ -1,24 +1,24 @@
 @echo off
-chcp 932 > /dev/null
+chcp 932 > nul
 cd /d "%~dp0"
 echo ===============================================
 echo  GitHubに更新をPushしてGitHub Pagesに自動公開
 echo ===============================================
 echo.
 
-rem 変更があるか確認
+rem 変更を確認
+git status --short
+
 git diff --quiet
-if errorlevel 1 (
-  echo [情報] 変更を検知しました。Commitします...
-) else (
-  git diff --cached --quiet
-  if errorlevel 1 (
-    echo [情報] ステージング済みの変更があります...
-  ) else (
-    echo [情報] 変更はありません。終了します。
-    pause
-    exit /b 0
-  )
+set DIFF_RESULT=%errorlevel%
+git diff --cached --quiet
+set CACHED_RESULT=%errorlevel%
+
+if %DIFF_RESULT% equ 0 if %CACHED_RESULT% equ 0 (
+  echo.
+  echo [情報] 変更はありません。終了します。
+  pause
+  exit /b 0
 )
 
 rem 全変更をadd
@@ -38,11 +38,11 @@ echo.
 echo [情報] GitHubにpushします...
 git push
 
-if errorlevel 0 (
+if %errorlevel% equ 0 (
   echo.
   echo ===============================================
   echo  Push成功! GitHub Pagesが自動デプロイ中...
-  echo  約30秒で https://abe2300.github.io/ebachan/ に反映されます
+  echo  約30秒後 https://abe2300.github.io/ebachan/ に反映されます
   echo ===============================================
 ) else (
   echo.

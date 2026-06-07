@@ -1,17 +1,15 @@
 @echo off
-chcp 932 > /dev/null
+chcp 932 > nul
 cd /d "%~dp0"
 
-rem ===== デスクトップ通知 =====
-powershell -ExecutionPolicy Bypass -Command " = New-BurntToastNotification -Text '定例報告アプリ', '朝の自動更新時間です。Claude Codeで「定例報告」と入力してください' 2>"
+rem ===== デスクトップ通知（任意） =====
+powershell -ExecutionPolicy Bypass -Command "try { $null = New-BurntToastNotification -Text '定例報告アプリ', '朝の自動更新時間です。Claude Codeで「定例報告」と入力してください' } catch {}" 2>nul
 
-rem 通知が失敗してもメッセージボックスで案内
-if errorlevel 1 (
-  powershell -Command "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')|Out-Null; [System.Windows.Forms.MessageBox]::Show('Claude Codeで「定例報告」と入力してHTMLを更新してください。完了後、このウィンドウでEnterキーを押すとGitHubにpushします。','定例報告 朝の自動更新','OK','Information')"
-)
+rem 通知が失敗していてもメッセージボックスで案内
+powershell -Command "[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')|Out-Null; [System.Windows.Forms.MessageBox]::Show('Claude Codeで「定例報告」と入力してHTMLを更新してください。完了後、このウィンドウでEnterキーを押すとGitHubにpushします。','朝の自動更新','OK','Information')"
 
 echo ===============================================
-echo  定例報告 朝の自動更新ルーティン
+echo  朝 朝の自動更新ルーティン
 echo ===============================================
 echo.
 echo 【作業手順】
@@ -25,7 +23,7 @@ echo.
 
 rem Claude Codeを開く
 echo [情報] Claude Codeを起動します...
-start "" "claude" 2>/dev/null
+start "" "claude" 2>nul
 if errorlevel 1 (
   echo [情報] claudeコマンドが見つからないため、ブラウザで起動します
   start "" "https://claude.ai/new"
@@ -34,9 +32,9 @@ if errorlevel 1 (
 echo.
 echo ===============================================
 echo  作業完了後、このウィンドウでEnterキーを押してください
-echo  -> 自動でGitHubにpushしてGitHub Pagesに公開します
+echo  -^> 自動でGitHubにpushしてGitHub Pagesに公開します
 echo ===============================================
-pause >/dev/null
+pause >nul
 
 rem 変更を確認
 echo.
@@ -67,11 +65,11 @@ for /f "tokens=1-3 delims=/ " %%a in ("%date%") do (
 git commit -m "Auto morning update: %DATE_STR%"
 git push
 
-if errorlevel 0 (
+if %errorlevel% equ 0 (
   echo.
   echo ===============================================
   echo  Push成功!
-  echo  数秒後: https://abe2300.github.io/ebachan/
+  echo  公開先: https://abe2300.github.io/ebachan/
   echo ===============================================
 ) else (
   echo.
