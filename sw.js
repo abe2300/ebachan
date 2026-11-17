@@ -1,4 +1,4 @@
-const CACHE = 'teireihoukoku-v9';
+const CACHE = 'teireihoukoku-v10';
 const ASSETS = [
   './',
   './index.html',
